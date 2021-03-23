@@ -1,1 +1,13 @@
-# Entity-Framework-Core-Getting-Started
+# Entity Framework Core Getting Started 專案原始碼
+
+|類型|專案名稱|專案說明|
+|-|-|-|
+|練習情境|EFQ01||
+|練習情境|||
+|練習情境|||
+|練習情境|||
+|練習情境|||
+|練習情境|||
+|練習情境|||
+|練習情境|||
+|練習情境|||
