@@ -3,7 +3,7 @@
 |類型|專案名稱|專案說明|
 |-|-|-|
 |體驗範例|EF01|EF Core 遷移練習前環境準備工作|
-|練習情境|EF02|建立 Entity Model 與 DbContext|
+|練習情境|EF02|建立 Entity Model 與 DbContext 並第一次遷移與同步|
 |練習情境|||
 |練習情境|||
 |練習情境|||
