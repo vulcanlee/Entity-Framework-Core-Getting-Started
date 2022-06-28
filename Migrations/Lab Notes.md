@@ -29,7 +29,7 @@
   * 刪除 [Class1.cs] 檔案
 * 建立新的資料夾 [Services]
 
-## EF02 - 建立 Entity Model 與 DbContext 並第一次遷移與同步
+## EF02 - 建立 一對多 Entity Model 與 DbContext 並第一次遷移與同步
 
 * 滑鼠右擊 [Entities] 專案內的 [相依性] 節點
 * 從彈出功能表中選擇 [管理 NuGet 套件]
@@ -190,9 +190,7 @@ namespace EF01
 
   > Script-Migration -StartupProject EF01 -Project Entities -Context MigrationLabContext -Idempotent
 
-
-
-## EF03 - 新增 Entity Model 並且進行直接資料庫同步
+## EF03 - 新建 一對一 Entity Model 並進行第 2 次遷移與同步
 
 * 在 [Entities] 專案下的 [Models] 資料夾，建立 [OneToOne.cs] 類別
 
@@ -228,6 +226,32 @@ namespace Entities.Models
 }
 ```
 
+* 在 [Entities] 專案下找到 [MigrationLabContext.cs] 並打開該檔案
+* 搜尋到 `public DbSet<Grade> Grade { get; set; }` 敘述，在其下方加入底下的程式碼
+
+```csharp
+        public DbSet<Employee> Employee { get; set; }
+        public DbSet<EmployeeAddress> EmployeeAddress { get; set; }
+```
+
+* 進行遷移工作，請點選功能表 [工具] > [NuGet 套件管理員] > [套件管理器主控台]
+  * 輸入底下指令
+
+    > Add-Migration AddNewEntityModel -StartupProject EF01 -Project Entities -Context MigrationLabContext
+
+* 若要還原剛剛的遷移工作，請下達底下指令
+
+  > Remove-Migration -StartupProject EF01 -Project Entities -Context MigrationLabContext
+
+* 一旦在 [Migrations] 資料夾內有新檔案產生出來後，便可以進行資料庫同步，請下達底下指令
+
+  > Update-Database -StartupProject EF01 -Project Entities -Context MigrationLabContext
+
+
+## EF04 - 新建 多對多 Entity Model 並進行第 3 次遷移與同步
+
+* 在 [Entities] 專案下的 [Models] 資料夾，建立 [OneToOne.cs] 類別
+
 * 在 [Entities] 專案下的 [Models] 資料夾，建立 [ManyToMany.cs] 類別
 
   > https://www.learnentityframeworkcore.com/configuration/many-to-many-relationship-configuration
@@ -262,4 +286,11 @@ namespace Entities.Models
     }
 }
 ```
+
+
+
+
+
+
+
 
