@@ -309,7 +309,21 @@ namespace Entities.Models
   > Update-Database -StartupProject EF01 -Project Entities -Context MigrationLabContext
 
 
+* 嘗試使用底下語法來產生資料庫遷移的 SQL 腳本，看看有何不同
 
+  > Script-Migration -StartupProject EF01 -Project Entities -Context MigrationLabContext -Idempotent
+  >
+  > Script-Migration MyFirstMigration AddManyToManyEntityModel -StartupProject EF01 -Project Entities -Context MigrationLabContext -Idempotent
+  >
+  > Script-Migration 0 AddManyToManyEntityModel -StartupProject EF01 -Project Entities -Context MigrationLabContext -Idempotent
+  >
+  > Script-Migration AddManyToManyEntityModel -StartupProject EF01 -Project Entities -Context MigrationLabContext -Idempotent
+
+* 腳本產生會接受下列兩個引數，以指出應該產生哪一個移轉範圍：
+
+  > 執行指令碼之前，from 移轉應該是套用到資料庫的最後一個移轉。 若未套用任何移轉，請指定 0 (此為預設)。
+  >
+  > 執行指令碼之後，to 移轉是套用到資料庫的最後一個移轉。 預設為您專案中的最後一個移轉。
 
 
 
