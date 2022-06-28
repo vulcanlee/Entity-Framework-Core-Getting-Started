@@ -192,7 +192,7 @@ namespace EF01
 
 ## EF03 - 新建 一對一 Entity Model 並進行第 2 次遷移與同步
 
-* 在 [Entities] 專案下的 [Models] 資料夾，建立 [OneToOne.cs] 類別
+* 在 [Entities] 專案下的 [Models] 資料夾，建立 [OneToOne.cs] 檔案，程式碼如下
 
   > https://www.tektutorialshub.com/entity-framework-core/ef-core-one-to-one-relationship/
 
@@ -250,9 +250,7 @@ namespace Entities.Models
 
 ## EF04 - 新建 多對多 Entity Model 並進行第 3 次遷移與同步
 
-* 在 [Entities] 專案下的 [Models] 資料夾，建立 [OneToOne.cs] 類別
-
-* 在 [Entities] 專案下的 [Models] 資料夾，建立 [ManyToMany.cs] 類別
+* 在 [Entities] 專案下的 [Models] 資料夾，建立 [ManyToMany.cs] 檔案，程式碼如下
 
   > https://www.learnentityframeworkcore.com/configuration/many-to-many-relationship-configuration
 
@@ -279,6 +277,7 @@ namespace Entities.Models
     }
     public class BookCategory
     {
+        public int Id { get; set; }
         public int BookId { get; set; }
         public Book Book { get; set; }
         public int CategoryId { get; set; }
@@ -286,6 +285,29 @@ namespace Entities.Models
     }
 }
 ```
+
+* 在 [Entities] 專案下找到 [MigrationLabContext.cs] 並打開該檔案
+* 搜尋到 `public DbSet<EmployeeAddress> EmployeeAddress { get; set; }` 敘述，在其下方加入底下的程式碼
+
+```csharp
+        public DbSet<Book> Book { get; set; }
+        public DbSet<Category> Category { get; set; }
+        public DbSet<BookCategory> BookCategory { get; set; }
+```
+
+* 進行遷移工作，請點選功能表 [工具] > [NuGet 套件管理員] > [套件管理器主控台]
+  * 輸入底下指令
+
+    > Add-Migration AddManyToManyEntityModel -StartupProject EF01 -Project Entities -Context MigrationLabContext
+
+* 若要還原剛剛的遷移工作，請下達底下指令
+
+  > Remove-Migration -StartupProject EF01 -Project Entities -Context MigrationLabContext
+
+* 一旦在 [Migrations] 資料夾內有新檔案產生出來後，便可以進行資料庫同步，請下達底下指令
+
+  > Update-Database -StartupProject EF01 -Project Entities -Context MigrationLabContext
+
 
 
 
