@@ -6,7 +6,7 @@
 |練習情境|EF02|建立 一對多 Entity Model 與 DbContext 並第一次遷移與同步|
 |練習情境|EF03|新建 一對一 Entity Model 並進行第 2 次遷移與同步|
 |練習情境|EF04|新建 多對多 Entity Model 並進行第 3 次遷移與同步||
-|練習情境|||
+|練習情境|EF05|自訂遷移作業 – 產生 Store Procedure|
 |練習情境|||
 |練習情境|||
 |練習情境|||
