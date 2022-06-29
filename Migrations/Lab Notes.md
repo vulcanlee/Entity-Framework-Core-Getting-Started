@@ -450,3 +450,128 @@ GO
 * 打開 Visual Studio 內的 [SQL Server 物件總管]，查看 [MigrationDB] 資料庫 > [可程式性] > [預存程序] 資料下，是否可以看到 [usp_GetAllStudentByName] 這個項目
 
 
+
+## EF06 - 自訂遷移作業 – 自訂遷移作業 – 資料植入
+
+* 建立一個空的 SeedDataEmployee 遷移
+* 進行遷移工作，請點選功能表 [工具] > [NuGet 套件管理員] > [套件管理器主控台]
+  * 輸入底下指令
+
+    > Add-Migration SeedDataEmployee -StartupProject EF01 -Project Entities -Context MigrationLabContext
+
+* 在 [Entities] 專案下的 [Models] 資料夾，找到剛剛建立的 [XXXXX_AddStoreProcedure.cs] 檔案
+
+  > https://dotnetthoughts.net/creating-stored-procs-in-efcore-migrations/
+
+* 這個檔案如下所示，其中 [Up] 與 [Down] 這兩個方法內，都沒有任何程式碼存在
+
+```csharp
+using Microsoft.EntityFrameworkCore.Migrations;
+
+#nullable disable
+
+namespace Entities.Migrations
+{
+    public partial class AddStoreProcedure : Migration
+    {
+        protected override void Up(MigrationBuilder migrationBuilder)
+        {
+
+        }
+
+        protected override void Down(MigrationBuilder migrationBuilder)
+        {
+
+        }
+    }
+}
+```
+
+將上述檔案修改成為底下內容
+
+```csharp
+using Microsoft.EntityFrameworkCore.Migrations;
+
+#nullable disable
+
+namespace Entities.Migrations
+{
+    public partial class AddStoreProcedure : Migration
+    {
+        protected override void Up(MigrationBuilder migrationBuilder)
+        {
+            var createProcSql = @"CREATE OR ALTER PROC usp_GetAllStudentByName(@paraStudentName nvarchar(max)) AS SELECT * FROM Student WHERE StudentName like @paraStudentName +'%' ";
+            migrationBuilder.Sql(createProcSql);
+        }
+
+        protected override void Down(MigrationBuilder migrationBuilder)
+        {
+            var dropProcSql = "DROP PROC usp_GetAllStudentByName";
+            migrationBuilder.Sql(dropProcSql);
+        }
+    }
+}
+```
+
+* 嘗試使用底下語法來產生資料庫遷移的 SQL 腳本
+
+  > Script-Migration -From AddManyToManyEntityModel -To AddStoreProcedure  -StartupProject EF01 -Project Entities -Context MigrationLabContext -Idempotent
+
+  此時，將會看到底下的 SQL Script ，   此時，將會看到底下的 SQL Script ，將會把剛剛建立的 Store Procedure 產生出來
+
+
+```sql
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20220629141612_AddStoreProcedure')
+BEGIN
+    CREATE OR ALTER PROC usp_GetAllStudentByName(@paraStudentName nvarchar(max)) AS SELECT * FROM Student WHERE StudentName like @paraStudentName +'%' 
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20220629141612_AddStoreProcedure')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20220629141612_AddStoreProcedure', N'6.0.6');
+END;
+GO
+
+COMMIT;
+GO
+```
+
+* 嘗試使用底下語法來產生資料庫遷移的 SQL 腳本
+
+  > Script-Migration -From AddStoreProcedure -To AddManyToManyEntityModel -StartupProject EF01 -Project Entities -Context MigrationLabContext -Idempotent
+
+  此時，將會看到底下的 SQL Script ，將會把剛剛建立的 Store Procedure 刪除
+
+```sql
+BEGIN TRANSACTION;
+GO
+
+IF EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20220629141612_AddStoreProcedure')
+BEGIN
+    DROP PROC usp_GetAllStudentByName
+END;
+GO
+
+IF EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20220629141612_AddStoreProcedure')
+BEGIN
+    DELETE FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20220629141612_AddStoreProcedure';
+END;
+GO
+
+COMMIT;
+GO
+```
+
+* 一旦在 [Migrations] 資料夾內有新檔案產生出來後，便可以進行資料庫同步，請下達底下指令
+
+  > Update-Database -StartupProject EF01 -Project Entities -Context MigrationLabContext
+
+* 打開 Visual Studio 內的 [SQL Server 物件總管]，查看 [MigrationDB] 資料庫 > [可程式性] > [預存程序] 資料下，是否可以看到 [usp_GetAllStudentByName] 這個項目
+
+
