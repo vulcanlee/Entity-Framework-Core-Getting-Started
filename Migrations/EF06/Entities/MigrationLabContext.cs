@@ -41,5 +41,6 @@ namespace Entities
         public DbSet<Book> Book { get; set; }
         public DbSet<Category> Category { get; set; }
         public DbSet<BookCategory> BookCategory { get; set; }
+        public DbSet<Blog> Blog { get; set; }
     }
 }
