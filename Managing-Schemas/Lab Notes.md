@@ -239,24 +239,13 @@ namespace EF08
 
 * 執行這個專案後，檢查所產生的資料庫結構是否正確
 
-
-
-
-
-
-
-
-
-
-
-
-## EF11 - 建立 Entity Framework Core Model 共用專案
+## EF11 - 建立 EF Core 反向工程 Model 共用專案
 
 * 建立 .NET 或 .NET Standard 類別庫專案 EF11
 
   > 勾選 [Do not use top-level statements]
 
-* 滑鼠右擊 [EF07] 專案內的 [相依性] 節點
+* 滑鼠右擊 [EF11] 專案內的 [相依性] 節點
 * 從彈出功能表中選擇 [管理 NuGet 套件]
 * 搜尋並且安裝 [Microsoft.EntityFrameworkCore.SqlServer] 套件
 * 搜尋並且安裝 [Microsoft.EntityFrameworkCore.Tools] 套件
@@ -265,7 +254,19 @@ namespace EF08
 
   > Scaffold-DbContext "Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=School" Microsoft.EntityFrameworkCore.SqlServer 
 
-* 打開 [Program.cs] 檔案，修改成為如下程式碼
+# EF12 - 建立 EF Core Code First Model 共用專案
+
+* 建立 .NET 或 .NET Standard 類別庫專案 EF12
+
+  > 勾選 [Do not use top-level statements]
+
+* 滑鼠右擊 [EF12] 專案內的 [相依性] 節點
+* 從彈出功能表中選擇 [管理 NuGet 套件]
+* 搜尋並且安裝 [Microsoft.EntityFrameworkCore.SqlServer] 套件
+* 搜尋並且安裝 [Microsoft.EntityFrameworkCore.Tools] 套件
+* 找到 [EF08] 專案資料夾下的 [Models] 資料夾
+* 將此資料夾複製到 [EF12] 專案根目錄下
+* 將 `EF08` 關鍵字，全部替換成為 `EF12`
 
 
 
