@@ -11,6 +11,16 @@
 |練習情境|EF07|使用資料庫反向工程，取得 EF Core 的資料模型|
 |練習情境|EF08|用 Code First 建立 Entity Framework Core 應用專案|
 |練習情境|EF09|使用 LoggerFactory 觀察送出的 SQL Statement|
+|練習情境|EF10|在 ASP.NET Core 專案內，建立其他日誌輸出設備|
+|練習情境|EF1||
+|練習情境|EF1||
+|練習情境|EF1||
+|練習情境|EF1||
+|練習情境|EF1||
+|練習情境|EF1||
+|練習情境|EF1||
+|練習情境|EF1||
+|練習情境|EF1||
 
 ## 參考文件
 &WT.mc_id=DT-MVP-5002220
