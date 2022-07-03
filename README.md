@@ -16,7 +16,7 @@
 |練習情境|EF12|建立 EF Core Code First Model 共用專案|
 |練習情境|EF13|EF Core 紀錄新增 Create|
 |練習情境|EF14|查看 EF Core 內變更追蹤的變化|
-|練習情境|EF15||
+|練習情境|EF15|EF Core 紀錄查詢 Retrive|
 |練習情境|EF16||
 |練習情境|EF17||
 |練習情境|EF18||
