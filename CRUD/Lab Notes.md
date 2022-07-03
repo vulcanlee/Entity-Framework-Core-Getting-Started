@@ -59,6 +59,55 @@ namespace EF13
 
 * 執行這個專案後，檢查 [SchoolCodeFirst] 資料庫內是否存在剛剛新增的紀錄
 
+## EF14 - EF Core 紀錄新增 Create
+
+* 複製專案 [EF13] 成為 [EF14]
+* 在專案根目錄下找到 [Program.cs] 檔案
+* 使用底下程式碼將其替換
+
+```csharp
+using EF12.Models;
+
+namespace EF13
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            var context = new DataContext();
+
+            #region 重新建立這個資料庫
+            context.Database.EnsureDeleted();
+            context.Database.EnsureCreated();
+            #endregion
+
+            #region 新增紀錄的方法之一
+            Department department1 = new Department()
+            {
+                Name = "新增的科系1",
+            };
+            context.Department.Add(department1);
+            #endregion
+
+            #region 新增紀錄的方法之二
+            Department department2 = new Department()
+            {
+                Name = "新增的科系2",
+            };
+            context.Entry(department2).State = Microsoft.EntityFrameworkCore.EntityState.Added;
+            #endregion
+
+            #region 新增記錄到資料庫內
+            context.SaveChanges();
+            #endregion
+        }
+    }
+}
+```
+
+* 執行這個專案後，檢查 [SchoolCodeFirst] 資料庫內是否存在剛剛新增的紀錄
+
+# aaa
 
 
 
