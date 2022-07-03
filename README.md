@@ -14,7 +14,7 @@
 |練習情境|EF10|在 ASP.NET Core 專案內，建立其他日誌輸出設備|
 |練習情境|EF11|建立 EF Core 反向工程 Model 共用專案|
 |練習情境|EF12|建立 EF Core Code First Model 共用專案|
-|練習情境|EF1||
+|練習情境|EF13|EF Core 紀錄新增 Create|
 |練習情境|EF1||
 |練習情境|EF1||
 |練習情境|EF1||
