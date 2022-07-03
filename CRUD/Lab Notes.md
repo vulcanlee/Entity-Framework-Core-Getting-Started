@@ -283,79 +283,67 @@ namespace EF15
 * 使用底下程式碼將其替換
 
 ```csharp
-using EF11;
-using Microsoft.EntityFrameworkCore;
+using EF12.Models;
 
-namespace EF15
+namespace EF13
 {
     internal class Program
     {
-        static async Task Main(string[] args)
+        static void Main(string[] args)
         {
-            var context = new SchoolContext();
+            var context = new DataContext();
 
-            WatchChangeTracking(context, "沒有任何紀錄查詢之前");
-
-            #region 查詢單一資料表紀錄
-            var person1 = await context.People.ToListAsync();
-            Console.WriteLine($"共發現到 {person1.Count} 筆記錄");
+            #region 重新建立這個資料庫
+            context.Database.EnsureDeleted();
+            context.Database.EnsureCreated();
             #endregion
 
-            WatchChangeTracking(context, "使用 People.ToListAsync() 方法，查詢單一資料表紀錄");
-            CleanChangeTracking(context);
-
-            #region 查看單一資料表內部份紀錄
-            var person2 = await context.People.Where(x => x.FirstName.StartsWith("R")).ToListAsync();
-            Console.WriteLine($"共發現到 {person2.Count} 筆記錄");
-            #endregion
-
-            WatchChangeTracking(context, "使用 Where() 方法，查看單一資料表內部份紀錄");
-            CleanChangeTracking(context);
-
-            #region 查看連帶關聯的資料表內紀錄
-            var course1 = await context.Courses
-                .Include(x => x.Department)
-                .ToListAsync();
-            Console.WriteLine($"共發現到 {course1.Count} 筆記錄");
-            #endregion
-
-            WatchChangeTracking(context, "使用 Include，查看連帶關聯的資料表內紀錄");
-            CleanChangeTracking(context);
-
-            #region 指定查詢不用變更追蹤
-            var course2 = await context.Courses
-                .Include(x => x.Department)
-                .AsNoTracking()
-                .ToListAsync();
-            Console.WriteLine($"共發現到 {course2.Count} 筆記錄");
-            #endregion
-
-            WatchChangeTracking(context, "指定查詢不用變更追蹤");
-            CleanChangeTracking(context);
-        }
-
-        #region 觀察 變更追蹤 Change Tracking 變化
-        private static void WatchChangeTracking(SchoolContext context, string message)
-        {
-            Console.WriteLine($"[{message}] 查看 變更追蹤 內的項目");
-            var allEntries = context.ChangeTracker.Entries();
-            foreach (var entry in allEntries)
+            #region 新增紀錄
+            Department department1 = new Department()
             {
-                Console.WriteLine($"Entity: {entry.Entity.GetType().Name}," +
-                    $"State: {entry.State.ToString()}");
-            }
-            Console.WriteLine();
-        }
+                Name = "新增的科系1",
+            };
+            context.Department.Add(department1);
+            context.SaveChanges();
+            Console.WriteLine($"請查看資料庫內 Department 資料表內，是否有這筆紀錄新增");
 
-        static void CleanChangeTracking(SchoolContext context)
-        {
-            var allEntries = context.ChangeTracker.Entries();
-            foreach (var entry in allEntries)
-            {
-                entry.State = EntityState.Detached;
-            }
+            Console.WriteLine("Press any key for continuing...");
+            Console.ReadKey();
+            #endregion
+
+            #region 更新紀錄 - 直接更新該執行個體的屬性值
+            department1.Name = "直接更新該執行個體的屬性值";
+            context.SaveChanges();
+
+            Console.WriteLine($"請查看資料庫內 Department 資料表內，剛剛新增紀錄是否已經被更新");
+
+            Console.WriteLine("Press any key for continuing...");
+            Console.ReadKey();
+            #endregion
+
+            #region 更新紀錄 - 呼叫 Update 方法
+            department1.Name = "呼叫 Update 方法";
+            context.Department.Update(department1);
+            context.SaveChanges();
+
+            Console.WriteLine($"請查看資料庫內 Department 資料表內，剛剛更新紀錄是否已經再次被更新");
+
+            Console.WriteLine("Press any key for continuing...");
+            Console.ReadKey();
+            #endregion
+
+            #region 更新紀錄 - 變更追蹤狀態為 EntityState.Modified
+            department1.Name = "變更追蹤狀態為 EntityState.Modified";
+            context.Entry(department1).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            context.SaveChanges();
+
+            Console.WriteLine($"請查看資料庫內 Department 資料表內，剛剛更新紀錄是否已經再次被更新");
+
+            Console.WriteLine("Press any key for continuing...");
+            Console.ReadKey();
+            #endregion
+
         }
-        #endregion
     }
 }
 ```
