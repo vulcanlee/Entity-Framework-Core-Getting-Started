@@ -59,7 +59,7 @@ namespace EF13
 
 * 執行這個專案後，檢查 [SchoolCodeFirst] 資料庫內是否存在剛剛新增的紀錄
 
-## EF14 - 查看 EF Core 內變更追蹤的變化
+## EF14 - EF Core 紀錄新增，查看變更追蹤的變化
 
 * 複製專案 [EF13] 成為 [EF14]
 * 在專案根目錄下找到 [Program.cs] 檔案
@@ -184,6 +184,178 @@ namespace EF15
             Console.WriteLine($"共發現到 {course2.Count} 筆記錄");
             #endregion
         }
+    }
+}
+```
+
+* 執行這個專案後，檢查執行結果
+
+## EF16 - EF Core 紀錄新增，查看變更追蹤的變化
+
+* 複製專案 [EF15] 成為 [EF16]
+* 在專案根目錄下找到 [Program.cs] 檔案
+* 使用底下程式碼將其替換
+
+```csharp
+using EF11;
+using Microsoft.EntityFrameworkCore;
+
+namespace EF15
+{
+    internal class Program
+    {
+        static async Task Main(string[] args)
+        {
+            var context = new SchoolContext();
+
+            WatchChangeTracking(context, "沒有任何紀錄查詢之前");
+
+            #region 查詢單一資料表紀錄
+            var person1 = await context.People.ToListAsync();
+            Console.WriteLine($"共發現到 {person1.Count} 筆記錄");
+            #endregion
+
+            WatchChangeTracking(context, "使用 People.ToListAsync() 方法，查詢單一資料表紀錄");
+            CleanChangeTracking(context);
+
+            #region 查看單一資料表內部份紀錄
+            var person2 = await context.People.Where(x => x.FirstName.StartsWith("R")).ToListAsync();
+            Console.WriteLine($"共發現到 {person2.Count} 筆記錄");
+            #endregion
+
+            WatchChangeTracking(context, "使用 Where() 方法，查看單一資料表內部份紀錄");
+            CleanChangeTracking(context);
+
+            #region 查看連帶關聯的資料表內紀錄
+            var course1 = await context.Courses
+                .Include(x => x.Department)
+                .ToListAsync();
+            Console.WriteLine($"共發現到 {course1.Count} 筆記錄");
+            #endregion
+
+            WatchChangeTracking(context, "使用 Include，查看連帶關聯的資料表內紀錄");
+            CleanChangeTracking(context);
+
+            #region 指定查詢不用變更追蹤
+            var course2 = await context.Courses
+                .Include(x => x.Department)
+                .AsNoTracking()
+                .ToListAsync();
+            Console.WriteLine($"共發現到 {course2.Count} 筆記錄");
+            #endregion
+
+            WatchChangeTracking(context, "指定查詢不用變更追蹤");
+            CleanChangeTracking(context);
+        }
+
+        #region 觀察 變更追蹤 Change Tracking 變化
+        private static void WatchChangeTracking(SchoolContext context, string message)
+        {
+            Console.WriteLine($"[{message}] 查看 變更追蹤 內的項目");
+            var allEntries = context.ChangeTracker.Entries();
+            foreach (var entry in allEntries)
+            {
+                Console.WriteLine($"Entity: {entry.Entity.GetType().Name}," +
+                    $"State: {entry.State.ToString()}");
+            }
+            Console.WriteLine();
+        }
+
+        static void CleanChangeTracking(SchoolContext context)
+        {
+            var allEntries = context.ChangeTracker.Entries();
+            foreach (var entry in allEntries)
+            {
+                entry.State = EntityState.Detached;
+            }
+        }
+        #endregion
+    }
+}
+```
+
+* 執行這個專案後，檢查執行結果
+
+## EF17 - EF Core 紀錄更新 Update
+
+* 複製專案 [EF13] 成為 [EF17]
+* 在專案根目錄下找到 [Program.cs] 檔案
+* 使用底下程式碼將其替換
+
+```csharp
+using EF11;
+using Microsoft.EntityFrameworkCore;
+
+namespace EF15
+{
+    internal class Program
+    {
+        static async Task Main(string[] args)
+        {
+            var context = new SchoolContext();
+
+            WatchChangeTracking(context, "沒有任何紀錄查詢之前");
+
+            #region 查詢單一資料表紀錄
+            var person1 = await context.People.ToListAsync();
+            Console.WriteLine($"共發現到 {person1.Count} 筆記錄");
+            #endregion
+
+            WatchChangeTracking(context, "使用 People.ToListAsync() 方法，查詢單一資料表紀錄");
+            CleanChangeTracking(context);
+
+            #region 查看單一資料表內部份紀錄
+            var person2 = await context.People.Where(x => x.FirstName.StartsWith("R")).ToListAsync();
+            Console.WriteLine($"共發現到 {person2.Count} 筆記錄");
+            #endregion
+
+            WatchChangeTracking(context, "使用 Where() 方法，查看單一資料表內部份紀錄");
+            CleanChangeTracking(context);
+
+            #region 查看連帶關聯的資料表內紀錄
+            var course1 = await context.Courses
+                .Include(x => x.Department)
+                .ToListAsync();
+            Console.WriteLine($"共發現到 {course1.Count} 筆記錄");
+            #endregion
+
+            WatchChangeTracking(context, "使用 Include，查看連帶關聯的資料表內紀錄");
+            CleanChangeTracking(context);
+
+            #region 指定查詢不用變更追蹤
+            var course2 = await context.Courses
+                .Include(x => x.Department)
+                .AsNoTracking()
+                .ToListAsync();
+            Console.WriteLine($"共發現到 {course2.Count} 筆記錄");
+            #endregion
+
+            WatchChangeTracking(context, "指定查詢不用變更追蹤");
+            CleanChangeTracking(context);
+        }
+
+        #region 觀察 變更追蹤 Change Tracking 變化
+        private static void WatchChangeTracking(SchoolContext context, string message)
+        {
+            Console.WriteLine($"[{message}] 查看 變更追蹤 內的項目");
+            var allEntries = context.ChangeTracker.Entries();
+            foreach (var entry in allEntries)
+            {
+                Console.WriteLine($"Entity: {entry.Entity.GetType().Name}," +
+                    $"State: {entry.State.ToString()}");
+            }
+            Console.WriteLine();
+        }
+
+        static void CleanChangeTracking(SchoolContext context)
+        {
+            var allEntries = context.ChangeTracker.Entries();
+            foreach (var entry in allEntries)
+            {
+                entry.State = EntityState.Detached;
+            }
+        }
+        #endregion
     }
 }
 ```

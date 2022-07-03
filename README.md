@@ -15,10 +15,10 @@
 |練習情境|EF11|建立 EF Core 反向工程 Model 共用專案|
 |練習情境|EF12|建立 EF Core Code First Model 共用專案|
 |練習情境|EF13|EF Core 紀錄新增 Create|
-|練習情境|EF14|查看 EF Core 內變更追蹤的變化|
+|練習情境|EF14|EF Core 紀錄新增，查看變更追蹤的變化|
 |練習情境|EF15|EF Core 紀錄查詢 Retrive|
-|練習情境|EF16||
-|練習情境|EF17||
+|練習情境|EF16|EF Core 紀錄查詢，查看變更追蹤的變化|
+|練習情境|EF17|EF Core 紀錄更新 Update|
 |練習情境|EF18||
 |練習情境|EF19||
 |練習情境|EF20||
